@@ -25,7 +25,7 @@ function Footer(props) {
                 <Typography>Your account for everything Autodesk</Typography>
             </Grid>
             <Grid item>
-                <Typography><a href="#">Learn More</a></Typography>
+                <Typography><a href="/">Learn More</a></Typography>
             </Grid>
         </Grid>
     );

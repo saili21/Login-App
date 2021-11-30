@@ -109,7 +109,7 @@ function CreateAccountForm(props) {
                 </Grid>
 
                 <Grid container className={classes.marginBottom16}>
-                    <Grid item item xs={12}>
+                    <Grid item xs={12}>
                         <Grid item xs={12}>
                             <Typography>Re-type password</Typography>
                         </Grid>
