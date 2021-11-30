@@ -11,8 +11,8 @@ import CreateAccountForm from './CreateAccount';
 
 function App() {
   return (
-    <div className="App" style={{ minHeight: "100 vh" }}>
-      <div class="page-wrap" style={{  marginBottom:60 }}>
+    <div style={{ minHeight: "100 vh" }}>
+      <div style={{  marginBottom:60 }}>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Login />} />

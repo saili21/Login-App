@@ -1,2 +1,8 @@
-
+.errorMsg {
+    background-color: #dcdcdc;
+    border-radius: 0px 0px 5px 5px;
+    padding: 5px;
+    font-size: 14;
+    color: #666666;
+}
 

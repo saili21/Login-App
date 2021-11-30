@@ -3,7 +3,8 @@ import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
 import PassworScreen from './PassworScreen';
 import UserNameScreen from './UserNameScreen';
-import {  Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 
 const useStyles = makeStyles((theme) => ({
     mainContainer: {
@@ -20,31 +21,17 @@ function Login(props) {
     const classes = useStyles();
 
     const userDetails = {
-        userName: "admin",
-        password: "admin"
+        userName: "johnsmith",
+        password: "john123"
     }
+
+    const { register, handleSubmit, formState: { errors } } = useForm();
 
     const [userName, setUserName] = useState("");
-    const [password, setPassword] = useState("");
     const [showPassworScreen, setShowPassworScreen] = useState(false);
     const [showSignInToaster, setShowSignInToaster] = useState(false);
-
-
-    const verifyUserName = () => {
-        if (userName === userDetails.userName) {
-            setShowPassworScreen(true);
-        } else {
-            setShowPassworScreen(false);
-        }
-    }
-
-    const signIn = () => {
-        if (password === userDetails.password) {
-            setShowSignInToaster(true);
-        } else {
-            setShowSignInToaster(false);
-        }
-    }
+    const [showUserNameInvalidError, setShowUserNameInvalidError] = useState(false);
+    const [showPasswordInvalidError, setShowPasswordInvalidError] = useState(false);
 
     const handleClose = () => {
         setShowSignInToaster(false);
@@ -54,20 +41,40 @@ function Login(props) {
         <Container maxWidth="sm" className={classes.mainContainer}>
             <Grid container>
                 {showSignInToaster ? <Snackbar
-                anchorOrigin={{ vertical:"top", horizontal:"center" }}
+                    anchorOrigin={{ vertical: "top", horizontal: "center" }}
                     open={showSignInToaster}
                     autoHideDuration={5000}
                     onClose={handleClose}
                 ><Alert severity="success" sx={{ width: '100%' }}>
-               Signed In!!
-              </Alert></Snackbar> : null}
-                {!showPassworScreen ? <UserNameScreen setUserName={setUserName} userName={userName} />
-                    : <PassworScreen setPassword={setPassword} password={password} userName={userName} />}
+                        Signed In!!
+                    </Alert></Snackbar> : null}
+                {!showPassworScreen ?
+                    <UserNameScreen
+                        register={register} errors={errors} showUserNameInvalidError={showUserNameInvalidError} />
+                    : <PassworScreen userName={userName}
+                        register={register} errors={errors} showPasswordInvalidError={showPasswordInvalidError} />}
                 <Grid xs={12} className={classes.marginTop12}>
-                    {!showPassworScreen ? <Button fullWidth variant="contained" onClick={verifyUserName} style={{ textTransform: "none" }}>Next</Button>
-                        : <Button fullWidth variant="contained" style={{ textTransform: "none" }} onClick={signIn} >Sign In</Button>}
+                    {!showPassworScreen ?
+                        <Button fullWidth variant="contained" onClick={handleSubmit(data => {
+                            if (data.userName !== userDetails.userName) {
+                                setShowUserNameInvalidError(true);
+                            } else {
+                                setShowUserNameInvalidError(false);
+                                setShowPassworScreen(true);
+                                setUserName(data.userName);
+                            }
+                        })} style={{ textTransform: "none" }}>Next</Button>
+                        : <Button fullWidth variant="contained" style={{ textTransform: "none" }}
+                            onClick={handleSubmit(data => {
+                                if (data.password !== userDetails.password) {
+                                    setShowPasswordInvalidError(true);
+                                } else {
+                                    setShowPasswordInvalidError(false);
+                                    setShowSignInToaster(true);
+                                }
+                            })} >Sign In</Button>}
                 </Grid>
-                <Grid xs={12} className={classes.marginTop12}>
+                <Grid container justifyContent="center" className={classes.marginTop12}>
                     <Typography>New to Autodesk?  <Link to="/create-account">Create Account</Link></Typography>
                 </Grid>
             </Grid>
